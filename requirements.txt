@@ -1,0 +1,6 @@
+### DELETE COMMENTS BELOW BEFORE SUBMITTING 
+# Just a few items to get us started!
+numpy
+pandas
+pytorch
+matplotlib
