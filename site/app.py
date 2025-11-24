@@ -27,10 +27,9 @@ option = st.selectbox(
     'Select city',
     df1['first column'])
 
-values = st.slider("Select Power Percentage", 0, 100,(0, 100))
-st.write("Value:", values)
+st.slider("Select Power Percentage", 0, 100)
 
-st.write(y, 'Select Commercial Coverage', x * x)
 x = st.slider('x')  # 👈 this is a widget
+st.write(y, 'Select Commercial Coverage', x * x)
 
 conn.close()
