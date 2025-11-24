@@ -29,7 +29,6 @@ option = st.selectbox(
 
 st.slider("Select Power Percentage", 0, 100, 0)
 
-x = st.slider('x')  # 👈 this is a widget
-st.write(y, 'Select Commercial Coverage', x * x)
+st.slider("Select Commercial Coverage", 0, 100, 0)
 
 conn.close()
