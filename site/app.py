@@ -30,9 +30,9 @@ option = st.selectbox(
 'Selected: ', option
 
 x = st.slider('x')  # 👈 this is a widget
-st.write(x, 'Select Power Percentage', x * x])
+st.write(x, 'Select Power Percentage', x * x)
 
 y = st.slider('y')  # 👈 this is a widget
-st.write(y, 'Select Commercial Coverage', x * y])
+st.write(y, 'Select Commercial Coverage', x * y)
 
 conn.close()
