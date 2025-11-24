@@ -27,7 +27,7 @@ option = st.selectbox(
     'Select city',
     df1['first column'])
 
-values = st.slider("Select Power Percentage", 0, 100,value=(0, 100) step=1, format=%d)
+values = st.slider("Select Power Percentage", 0, 100,(0, 100))
 st.write("Value:", values)
 
 #st.write(x, 'Select Power Percentage', x * x)
