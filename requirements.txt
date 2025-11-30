@@ -1,6 +1,13 @@
-### DELETE COMMENTS BELOW BEFORE SUBMITTING 
-# Just a few items to get us started!
-numpy
-pandas
-pytorch
+torch
+torchvision
 matplotlib
+pandas
+numpy
+Pillow
+PyPDF2
+PyYAML
+opencv-python
+tqdm
+detectron2
+streamlit
+psycopg2-binary
