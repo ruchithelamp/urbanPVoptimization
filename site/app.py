@@ -13,11 +13,13 @@ st.title("EIA Hourly Demand from supabase db")
 conn = psycopg2.connect(db_url)
 
 # Simple query
-query = "SELECT * FROM eia_hourly_demand LIMIT 3"
+query = "SELECT * FROM TEPC_demand LIMIT 3"
 
 df = pd.read_sql(query, conn)
 
 st.dataframe(df)
+
+conn.close()
 
 df1 = pd.DataFrame({
     'first column': ['Ann Arbor', 'Tucson'],
@@ -30,5 +32,3 @@ option = st.selectbox(
 st.slider("Select Power Percentage", 0, 100, 0)
 
 st.slider("Select Commercial Coverage", 0, 100, 0)
-
-conn.close()
