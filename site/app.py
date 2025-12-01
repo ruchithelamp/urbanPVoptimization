@@ -19,8 +19,6 @@ df = pd.read_sql(query, conn)
 
 st.dataframe(df)
 
-conn.close()
-
 df1 = pd.DataFrame({
     'first column': ['Ann Arbor', 'Tucson'],
     })
@@ -32,3 +30,5 @@ option = st.selectbox(
 st.slider("Select Power Percentage", 0, 100, 0)
 
 st.slider("Select Commercial Coverage", 0, 100, 0)
+
+conn.close()
