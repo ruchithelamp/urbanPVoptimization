@@ -18,34 +18,32 @@ df = pd.read_sql(query, conn)
 
 st.dataframe(df)
 
-conn.close()
+df1 = pd.DataFrame({
+    'first column': ['Ann Arbor', 'Tucson'],
+    })
 
-#df1 = pd.DataFrame({
-#    'first column': ['Ann Arbor', 'Tucson'],
-#    })
-
-#option = st.selectbox(
-#    'Select city',
-#    df1['first column'])
+option = st.selectbox(
+    'Select city',
+    df1['first column'])
 
 # Map container
-#map_container = st.container(border=True)
+map_container = st.container(border=True)
 #with map_container:
 #    st.map(data=df1.rename(columns={'first column': 'city'}).assign(lat=[42.2808, 32.2226], lon=[-83.7430, -110.9747]))
 
 # City specs container
-#city_specs = "City specs." * 1000
+city_specs = "City specs." * 1000
+with st.container(height=300):
+    st.markdown(city_specs)
 
-#with st.container(height=300):
-#    st.markdown(city_specs)
-
-#st.slider("Select Power Percentage", 0, 100, 0)
-
-#st.slider("Select Commercial Coverage", 0, 100, 0)
+# Power percentage slider
+st.slider("Select Power Percentage", 0, 100, 0)
+# Commercial coverage slider
+st.slider("Select Commercial Coverage", 0, 100, 0)
 
 # Results container
-#results_container = "Results container." * 1000
-#with st.container(height=300):
-#    st.markdown(results_container)
+results_container = "Results container." * 1000
+with st.container(height=300):
+    st.markdown(results_container)
 
-#conn.close()
+conn.close()
