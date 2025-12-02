@@ -4,8 +4,7 @@ import psycopg2
 
 db_url = st.secrets["connections"]["supabase"]
 
-
-
+# Title
 st.title("EIA Hourly Demand from supabase db")
 
 # connection to db 
