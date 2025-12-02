@@ -11,7 +11,8 @@ st.title("EIA Hourly Demand from supabase db")
 conn = psycopg2.connect(db_url)
 
 # Simple query
-query = "SELECT * FROM TEPC_demand LIMIT 3"
+query = "SELECT * FROM eia_hourly_demand LIMIT 3"
+#query = "SELECT * FROM TEPC_demand LIMIT 3"
 
 df = pd.read_sql(query, conn)
 
