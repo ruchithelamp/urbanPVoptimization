@@ -67,81 +67,64 @@ insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — opti
 # Map container
 map_container = st.container(border=True)
 with map_container:
-    # Basic plot
-    tags = {"building": True}
-    gdf = ox.features.features_from_place(city, tags)
-
-    # to show just an image of the footprints
-    fig, ax = ox.plot.plot_footprints(gdf, figsize=(8, 6))
-    st.pyplot(fig)
-
     # Layered version with R/C classification
     # Get residential buildings
-    #r_tags = {"building": ["residential"]}
-    #gdf_residential = ox.features.features_from_place(city, r_tags)
+    r_tags = {"building": ['apartments', 'residential', 'garage', 'detached', 'bungalow', 'house', 'semidetached_house']}
+    gdf_residential = ox.features.features_from_place(city, r_tags)
     
     # Get commercial/industrial buildings
-    #c_tags = {"building": ["commercial", "industrial", "warehouse"]}
-    #gdf_commercial = ox.features.features_from_place(city, c_tags)
+    c_tags = {"building": ['office', 'university', 'yes',  'train_station', 'courthouse', 
+                           'hospital', 'industrial', 'warehouse', 'hotel', 'commercial', 
+                           'roof', 'public', 'carport', 'parking', 'retail', 'college', 'yes;no', 
+                           'storage_tank', 'central_office', 'terrace', 'garages', 'civic', 'government', 'data_center']}
+    gdf_commercial = ox.features.features_from_place(city, c_tags)
     
     # Create figure and plot both layers
-    #fig, ax = ox.plot.plot_footprints(
-    #    gdf_residential, 
-    #    figsize=(10, 8), 
-    #    color='blue', 
-    #    ax=None,  # Create new axes
-    #    save=False,
-    #    show=False,
-    #    close=False
-    #)
+    fig, ax = ox.plot.plot_footprints(
+        gdf_residential, 
+        figsize=(10, 8), 
+        color='blue', 
+        ax=None,  # Create new axes
+        save=False,
+        show=False,
+        close=False
+    )
     
     # Add commercial buildings to the same axes
-    #ox.plot.plot_footprints(
-    #    gdf_commercial, 
-    #    color='red', 
-    #    ax=ax,  # Use the same axes
-    #    save=False,
-    #    show=False,
-    #    close=False
-    #)
+    ox.plot.plot_footprints(
+        gdf_commercial, 
+        color='red', 
+        ax=ax,  # Use the same axes
+        save=False,
+        show=False,
+        close=False
+    )
     
-    # Add a legend
+    # Add a legend - too large and ugly, change to inactive buttons?
     #from matplotlib.patches import Patch
     #legend_elements = [
     #    Patch(facecolor='blue', label='Residential'),
     #    Patch(facecolor='red', label='Commercial/Industrial')
     #]
-    #ax.legend(handles=legend_elements, loc='upper right')
+    #ax.legend(handles=legend_elements, loc='lower left')
     
-    #st.pyplot(fig)
-
-    # for interactive version - too large to render all at once
-    #tags = {"building": ['residential']}
-    #gdf = ox.features.features_from_place(city, tags={"building": True})
-    
-    # Reduce data size by:
-    # 1. Taking only a sample of buildings
-    #gdf_sample = gdf.sample(n=min(1000, len(gdf)))  # Max 1000 buildings
-    
-    # 2. Simplifying geometries
-    #gdf_sample['geometry'] = gdf_sample['geometry'].simplify(tolerance=0.0001)
-    
-    # 3. Keep only necessary columns
-    #cols = ["height", "addr:housenumber", "addr:street", "addr:postcode"]
-    #cols_to_keep = [col for col in cols if col in gdf_sample.columns] + ['geometry']
-    #gdf_sample = gdf_sample[cols_to_keep]
-    
-    #m = gdf_sample.explore(tiles="cartodbdarkmatter", tooltip=cols)
-    #st_folium(m, width=700, height=500)
+    st.pyplot(fig)
 
 # City specs container
 st.write("City Specs")
-city_specs = "City specs." * 500
 with st.container(height=300):
-    st.markdown(city_specs)
+    st.write("Number of residential buildings:" + '' * 25 + "Available m2:")
+    st.write("Number of commercial buildings:" + '' * 25 + "Available m2:")
+    st.write("Average yearly power demand:")
+    st.write("Projected power demand: " + '' * 25 + "Growth rate: ")
+    st.write("Current cost:")
 
 # Results container
 st.write("Results")
-results_container = "Results container." * 500
 with st.container(height=300):
-    st.markdown(results_container)
+    st.write("Number of commercial buildings used:")
+    st.write("Number of residential buildings used:")
+    st.write("Estimated number of panels required: " + '' * 25 + "Estimated total panel cost: ")
+    st.write("Payback period:")
+    #st.write("First year savings: " + "25 year savings: ")
+    #st.write("Annual CO2 redux: " + "25 year CO2 redux")
