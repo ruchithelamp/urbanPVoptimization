@@ -72,7 +72,7 @@ with map_container:
     gdf = ox.features.features_from_place(city, tags)
 
     # to show just an image of the footprints
-    fig, ax = ox.plot.plot_footprints(gdf, figsize=(10, 8))
+    fig, ax = ox.plot.plot_footprints(gdf, figsize=(8, 6))
     st.pyplot(fig)
 
     # Layered version with R/C classification
