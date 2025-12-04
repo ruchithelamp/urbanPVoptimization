@@ -353,7 +353,6 @@ if st.sidebar.button("Analyze"):
         st.stop()
 
     # Compute annual energy
-    st.write("**Step 2: Computing annual energy need...**")
     with st.spinner("Computing annual energy need..."):
         annual_kwh = compute_city_annual_kwh(df_demand)
     
@@ -419,14 +418,13 @@ if st.sidebar.button("Analyze"):
             progress.empty()
             st.write(f"Shade range: {buildings['shade'].min():.2f} to {buildings['shade'].max():.2f}")
         else:
-            st.warning("Shade_from_geotiff function not found. Setting shade=0")
+            st.warning("Shade from geotiff not found. Setting shade=0")
             buildings["shade"] = 0.0
     else:
         buildings["shade"] = 0.0
-        st.write("✓ Shade set to 0.0 (no raster)")
+        st.write("Shade set to 0.0 (no raster)")
 
     # Irradiance and azimuth
-    st.write("**Step 7: Computing irradiance factor and ideal azimuth...**")
     irr_factor = np.clip(insolation_override / 7.0, 0.0, 1.0)
     
     if {"azimuth_sunrise","azimuth_sunset"}.issubset(df_demand.columns):
@@ -436,10 +434,8 @@ if st.sidebar.button("Analyze"):
             st.write(f"✓ Ideal azimuth: {ideal_azimuth:.1f}° (from data)")
         except Exception:
             ideal_azimuth = 180.0
-            st.write(f"✓ Ideal azimuth: 180° (default)")
     else:
         ideal_azimuth = 180.0
-        st.write(f"✓ Ideal azimuth: 180° (default)")
 
     # Compute suitability scores
     with st.spinner("Computing solar suitability scores and annual potential..."):
