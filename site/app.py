@@ -33,6 +33,78 @@ key = st.secrets["SUPABASE_ANON_KEY"]
 
 supabase: Client = create_client(url, key)
 
+def download_geotiff_from_supabase(bucket: str, filename: str):
+    """
+    Download a GeoTIFF from Supabase Storage and return an open rasterio dataset.
+
+    This is intentionally simple: it just downloads the file and opens it.
+    We assume the TIF already covers the right ZIP area.
+    """
+    #Download file bytes from supbase
+    file_bytes = supabase.storage.from_(bucket).download(filename)
+
+    #Write to a temporary file so rasterio can open it
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".tif")
+    tmp.write(file_bytes)
+    tmp.flush()
+    tmp.close()
+
+    # Open with rasterio and return the dataset
+    return rasterio.open(tmp.name)
+
+def shade_from_geotiff(raster, geom):
+    """
+    Compute a simple shade score in [0, 1] for a building geometry from a GeoTIFF.
+
+    Steps:
+      1. Reproject the building geometry to the raster's CRS (if needed).
+      2. Clip the raster to that polygon.
+      3. Take the mean pixel value in the first band and scale it 0–1.
+
+    This assumes higher raster values = more shade.
+    """
+    # If geometry is missing or empty, just say "no shade"
+    if geom is None or geom.is_empty:
+        return 0.0
+
+    try:
+        # Wrap geometry in a GeoDataFrame so we can reproject
+        gdf = gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")  # OSM is lat/lon
+
+        # Match raster CRS if it has one
+        if raster.crs is not None and gdf.crs != raster.crs:
+            gdf = gdf.to_crs(raster.crs)
+
+        geom_proj = gdf.geometry.iloc[0]
+
+        # Clip the raster to this building polygon
+        out_image, _ = mask(raster, [mapping(geom_proj)], crop=True)
+    except Exception:
+        # If anything goes wrong (outside raster, reprojection issues, etc.), treat as no shade
+        return 0.0
+
+    # If the clip returned nothing, also treat as no shade
+    if out_image.size == 0:
+        return 0.0
+
+    # Use the first band
+    band = out_image[0].astype(float)
+
+    # Drop nodata values if defined
+    nodata = raster.nodata
+    if nodata is not None:
+        band = band[band != nodata]
+
+    # If nothing left, no shade
+    if band.size == 0:
+        return 0.0
+
+    # Simple scaling assuming 0–255 range (typical imagery)
+    mean_val = band.mean()
+    shade = float(np.clip(mean_val / 255.0, 0.0, 1.0))
+
+    return shade
+
 st.set_page_config(layout="wide", page_title="Solar Suitability Planner")
 
 # Default avg daily insolation
