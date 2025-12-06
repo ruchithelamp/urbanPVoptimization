@@ -36,13 +36,6 @@ class SolarSuitability:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors="coerce")
 
-        # Azimuth cleanup
-        if "Azimuth_Sunrise" in df.columns:
-            df["azimuth_sunrise"] = df["Azimuth_Sunrise"].str.replace("°", "").astype(float)
-
-        if "Azimuth_Sunset" in df.columns:
-            df["azimuth_sunset"] = df["Azimuth_Sunset"].str.replace("°", "").astype(float)
-
         return df
 
     def fetch_buildings_osm(self):
@@ -179,8 +172,7 @@ class SolarSuitability:
 
         return gdf
 
-    @staticmethod
-    def select_buildings(gdf, required_kwh, commercial_pct):
+    def select_buildings(self, gdf, required_kwh, commercial_pct):
         comm = gdf[~gdf["is_residential"]].sort_values("solar_score", ascending=False)
         resid = gdf[gdf["is_residential"]].sort_values("solar_score", ascending=False)
 
