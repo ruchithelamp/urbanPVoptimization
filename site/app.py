@@ -52,18 +52,6 @@ def load_demand_table(city: str):
     res = supabase.table(table_name).select("*").limit(100000).execute()
     data = res.data
     df = pd.DataFrame(data)
-
-    # Convert data types - working on correcting OG csv and db so this can be removed
-    if 'MW' in df.columns:
-        df['MW'] = pd.to_numeric(df['MW'], errors='coerce')
-    if 'Year' in df.columns:
-        df['Year'] = pd.to_numeric(df['Year'], errors='coerce')
-    
-    # Parse azimuth columns if they exist (remove degree symbol)
-    if 'Azimuth_Sunrise' in df.columns:
-        df['azimuth_sunrise'] = df['Azimuth_Sunrise'].str.replace('°', '').astype(float)
-    if 'Azimuth_Sunset' in df.columns:
-        df['azimuth_sunset'] = df['Azimuth_Sunset'].str.replace('°', '').astype(float)
         
     return df
 
