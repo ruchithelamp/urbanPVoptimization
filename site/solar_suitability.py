@@ -80,8 +80,7 @@ class SolarSuitability:
 
         return gdf
 
-    @staticmethod
-    def compute_city_annual_kwh(df):
+    def compute_city_annual_kwh(self, df):
         """
         Convert 15-min MW demand to annual kWh and estimate next year's demand.
         """
@@ -94,8 +93,7 @@ class SolarSuitability:
         growth = 0.02 if pd.isna(last["growth_rate"]) else last["growth_rate"]
         return last["annual_kWh"] * (1 + growth)
 
-    @staticmethod
-    def polygon_orientation(poly: Polygon):
+    def polygon_orientation(self, poly: Polygon):
         if poly.is_empty:
             return np.nan
         mrr = poly.minimum_rotated_rectangle
@@ -115,8 +113,7 @@ class SolarSuitability:
 
         return (90 - best_angle) % 360
 
-    @staticmethod
-    def estimate_tilt_from_height_and_span(gdf):
+    def estimate_tilt_from_height_and_span(self, gdf):
         """
         Estimate roof tilt using height / levels.
         """
@@ -140,8 +137,7 @@ class SolarSuitability:
         gdf["tilt_deg"] = gdf["tilt_deg"].clip(3, 45)
         return gdf
 
-    @staticmethod
-    def orientation_match_score(roof_deg, ideal_deg):
+    def orientation_match_score(self, roof_deg, ideal_deg):
         diff = abs(roof_deg - ideal_deg) % 360
         diff = diff if diff <= 180 else 360 - diff
         return 1 - (diff / 180)
