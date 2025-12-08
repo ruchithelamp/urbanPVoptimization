@@ -95,4 +95,29 @@ def roofarea(img_path, city, supa):
   # conversion ft squared times all pixels
   a_sqft = px * (conversion ** 2)
 
-  return a_sqft
+  mask = roof_vis(predicted)
+
+  return a_sqft, mask
+
+
+# inferencing mask overlay
+def roof_vis(pred, og_size=(256, 256)):
+   import cv2
+   import numpy as np
+
+   img = pred.orig_img.copy()
+   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+   overlay = np.zeros_like(img, dtype=np.uint8)
+
+   if pred.masks is not None:
+      for mask, class_id in zip(pred.masks.data, pred.boxes.cls):
+         if int(class_id) == 1:  # roof class
+                m = mask.cpu().numpy()
+                m = cv2.resize(m, og_size, interpolation=cv2.INTER_NEAREST)
+                m = (m > 0.5).astype(np.uint8) * 255
+
+                # Add a red tint for roof pixels
+                overlay[m == 255] = [255, 255, 0]
+   blended = cv2.addWeighted(img, 0.7, overlay, 0.3, 0)
+   return blended
