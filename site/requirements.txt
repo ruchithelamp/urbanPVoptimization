@@ -25,3 +25,9 @@ PyPDF2
 PyYAML
 requests
 tqdm
+folium
+streamlit-folium
+rtree
+pyproj
+fiona
+
