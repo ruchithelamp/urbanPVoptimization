@@ -1,33 +1,8 @@
 # app.py
-
-from __future__ import annotations
-
-from pathlib import Path
-
 import streamlit as st
-from supabase import create_client, Client
-import pandas as pd
 import geopandas as gpd
-import numpy as np
-import os
-import tempfile
-import requests
-from datetime import datetime, timedelta
-
-import rasterio
-from rasterio.mask import mask
-import osmnx as ox
-import shapely
-from shapely.geometry import Polygon, mapping
-import pydeck as pdk
-import json
-
-# from IPython.display import Image
-import matplotlib.pyplot as pyplot
-import folium
-import folium.features
-from streamlit_folium import st_folium
-from folium.plugins import GroupedLayerControl
+from shapely.geometry import mapping
+import SolarSuitability
 
 from utils.inference import roofarea
 from utils.conversions import CITY_RULES
