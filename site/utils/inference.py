@@ -1,10 +1,9 @@
 # utils/inference.py
 import os
-import os
-os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
-os.environ["OPENCV_VIDEOIO_PRIORITY_GSTREAMER"] = "0"
-os.environ["OPENCV_VIDEOIO_PRIORITY_FFMPEG"] = "0"
+os.environ["OPENCV_VIDEOIO_DISABLE"] = "1"
 os.environ["OPENCV_OPENGL_SUPPORT"] = "0"
+os.environ["OPENCV_ENABLE_NONFREE"] = "0"
+os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "0"
 
 import numpy as np
 import cv2
