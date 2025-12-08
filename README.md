@@ -23,3 +23,6 @@ If you have any issues running this code, or have questions for the creators of 
 Erin Mettler: `<Emettler97>` `<emettler@umich.edu>`,
 Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
 Stephanie Maciejewski: `<PteroisRadiata>`, `<smacieje@umich.edu>`
+
+# DATA ACCESS STATEMENT - UPDATE THIS!
+"how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected."
