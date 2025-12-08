@@ -77,7 +77,7 @@ def roofarea(img_path, city, supa):
   conversion = get_city_conversion(city)
 
   # YOLO predict (roof shapes), get Results object
-  from app import supabase 
+#   from app import supabase 
   model = load_model(supa)
   predicted = model.predict(img_path, save=False)[0]
 
