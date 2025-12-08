@@ -548,7 +548,7 @@ with tab2:
         if st.button("Calculate Roof Area"): 
             with st.spinner("Predicting..."):
                 try:
-                    area = roofarea(tile, city_choose)
+                    area = roofarea(tile, city_choose, supabase)
                     st.success(f"Roof Area Estimation: {area} sq ft")
                 except Exception as e: 
                     st.error(f"Error: {e}")
