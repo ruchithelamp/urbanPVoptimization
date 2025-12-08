@@ -22,11 +22,13 @@ The repository contains all of the code that was used to train the models, gener
 
 If you have any issues running this code, or have questions for the creators of this project, please contact the following people:
 
+Stephanie Maciejewski: `<PteroisRadiata>`, `<smacieje@umich.edu>`
+
 Erin Mettler: `<Emettler97>` `<emettler@umich.edu>`,
 
 Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
 
-Stephanie Maciejewski: `<PteroisRadiata>`, `<smacieje@umich.edu>`
+
 
 # DATA ACCESS STATEMENT - UPDATE THIS!
 "how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected."
