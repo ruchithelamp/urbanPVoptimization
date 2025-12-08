@@ -120,6 +120,7 @@ class SolarSuitability:
             except Exception:
                 return np.sqrt(geom.area)
 
+        #gdf["width_m"] = gdf.geometry.to_crs(epsg=3857).apply(lambda geom: approx_width(geom)) change to keep crs projection?
         gdf["width_m"] = gdf.geometry.apply(approx_width)
         gdf["tilt_deg"] = np.degrees(np.arctan2(heights.fillna(5), gdf["width_m"] / 2))
         gdf["tilt_deg"] = gdf["tilt_deg"].clip(3, 45)
@@ -139,7 +140,7 @@ class SolarSuitability:
         gdf["tilt_score"] = 1 - (abs(gdf["tilt_deg"] - 25) / 40)
         gdf["tilt_score"] = gdf["tilt_score"].clip(0, 1)
 
-        gdf["exposure_score"] = 1 - gdf["shade"]
+        gdf["exposure_score"] = 1 - gdf["shade"] #clip(0,1) again?
 
         irr = np.clip(irr_factor, 0, 1)
 
@@ -149,15 +150,15 @@ class SolarSuitability:
             + 0.25 * gdf["exposure_score"]
             + 0.15 * irr
         )
-
+        #gdf["solar_score"] = gdf["solar_score"].clip(0,1)
         return gdf
 
     def estimate_building_annual_potential(self, gdf):
-        COMM = 0.50
-        RES = 0.25
+        COMMERCIAL_FRACTION = 0.50
+        RESIDENTIAL_FRACTION = 0.25
 
         gdf["usable_fraction"] = gdf["is_residential"].apply(
-            lambda x: RES if x else COMM
+            lambda x: RESIDENTIAL_FRACTION if x else COMMERCIAL_FRACTION
         )
         gdf["usable_area_m2"] = gdf["area_m2"] * gdf["usable_fraction"]
 
@@ -168,8 +169,8 @@ class SolarSuitability:
         return gdf
 
     def select_buildings(self, gdf, required_kwh, commercial_pct):
-        comm = gdf[~gdf["is_residential"]].sort_values("solar_score", ascending=False)
-        resid = gdf[gdf["is_residential"]].sort_values("solar_score", ascending=False)
+        comm = gdf[~gdf["is_residential"]].sort_values("solar_score", ascending=False) #.copy()?
+        resid = gdf[gdf["is_residential"]].sort_values("solar_score", ascending=False) #.copy()?
 
         sel = []
         total_kwh = 0
@@ -180,7 +181,7 @@ class SolarSuitability:
 
         while total_kwh < required_kwh and (ptr_c < len(comm) or ptr_r < len(resid)):
 
-            curr_frac = selected_comm / len(sel) if sel else 0
+            curr_frac = selected_comm / len(sel) if sel else 0 #if sel > 0 else 0?
 
             if curr_frac < target_frac and ptr_c < len(comm):
                 row = comm.iloc[ptr_c]; ptr_c += 1
