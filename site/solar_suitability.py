@@ -31,11 +31,6 @@ class SolarSuitability:
 
         df = pd.DataFrame(res.data)
 
-        # Type cleanup
-        for col in ("MW", "Year"):
-            if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors="coerce")
-
         return df
 
     def fetch_buildings_osm(self):
