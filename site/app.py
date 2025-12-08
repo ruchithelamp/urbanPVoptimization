@@ -336,7 +336,7 @@ with tab1:
 
 
     # Sidebar controls
-    city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"], key="mainpage_city")
+    city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"], key="sidebar_city_selector")
     solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
     commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
     insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
