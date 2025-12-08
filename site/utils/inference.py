@@ -8,19 +8,35 @@ import streamlit as st
 
 # MAKE SURE model file is in root of site folder PLEASE
 #  model path will be called from site.py; path should be from site.py POV
+# we are getting it from SUPABASE and saving to /tmp/
 
-MODEL_PATH = "best.pt"
-
-# Initiate YOLO model from best.pt path
+MODEL_PATH = "/tmp/best.pt"
 
 @st.cache_resource
 def load_model():
-    return YOLO(MODEL_PATH)
+    from app import supabase  # import Supabase client from app.py
+
+    # download pt from supabase
+    path = download_model_from_supabase(supabase)
+    # load YOLO model from that path
+    return YOLO(path)
 
 model = load_model()
 
 
 # ---------------------- Inferencing Functions ------------------------
+def download_model_from_supabase(supabase, bucket="models", filename="best.pt"):
+    """
+    get YOLO model from supabase and saves to env
+    Returns the local path.
+    """
+    data = supabase.storage.from_(bucket).download(filename)
+
+    local_path = "/tmp/best.pt"
+    with open(local_path, "wb") as f:
+        f.write(data)
+
+    return local_path
 
 # find_roof_shapes
 def find_roof_shapes(predicted, og_size = (256, 256)): 
