@@ -19,7 +19,7 @@ Using high-resolution satellite imagery, we:
 
 The repository contains all of the code that was used to train the models, generate the figures in the report, and produce an interactive tool for exploring rooftop PV potential.This is an end-to-end pipeline that will be able to detect existing rooftops and PV panels from aerial sattelite images, compute the solar/PV panel potential of those rooftops, and export the optimal mix of rooftops to install PV panels on to meet a user-specific electric capacity amount.
 
-
-# Data Access Statement:
-"indicating how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected."
-
+If you have any issues running this code, or have questions for the creators of this project, please contact the following:
+Erin Mettler: `<Emettler97>` `<emettler@umich.edu>`,
+Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
+Stephanie Maciejewski: `<PteroisRadiata>`, `<smacieje@umich.edu>`
