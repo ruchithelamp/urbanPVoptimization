@@ -336,7 +336,7 @@ with tab1:
 
 
     # Sidebar controls
-    city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"])
+    city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"], key=["mainpage_city"])
     solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
     commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
     insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
@@ -534,7 +534,7 @@ with tab2:
     st.write("Upload a 256x256 satellite tile, and choose the respective city. ")
 
     city_choose = st.selectbox(
-        "Select your city", list(CITY_RULES.keys())
+        "Select your city", list(CITY_RULES.keys()), key="roof_city"
     )
 
     # image upload
