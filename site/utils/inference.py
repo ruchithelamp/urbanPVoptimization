@@ -76,6 +76,13 @@ def roofarea(img_path, city, supa):
   # Get city conversion (float)
   conversion = get_city_conversion(city)
 
+  # streamlit is messing with image type by the time it gets to the model 
+  import tempfile
+  with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
+    tmp.write(img_path.read())
+    tmp.flush()
+    img_path = tmp.name
+
   # YOLO predict (roof shapes), get Results object
 #   from app import supabase 
   model = load_model(_sup=supa)
