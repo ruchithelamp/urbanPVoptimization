@@ -329,23 +329,18 @@ from utils.inference import roofarea
 st.title("Urban Solar Suitability Planner")
 # seperating into tabs for area calculations, COS dont wanna mess anything up, louise
 tab1, tab2 = st.tabs(["Solar Suitability Planner", "Roof Area Estimator"])
-
+# Sidebar controls
+city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"], key="sidebar_city_selector")
+solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
+commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
+insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
+                                            value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
+analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
 with tab1: 
     st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
 
-
-
-    # Sidebar controls
-    city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"], key="sidebar_city_selector")
-    solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
-    commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
-    insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
-                                                value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
-
-    # ---------------------------------
-
     # Button
-    if st.sidebar.button("Analyze"):
+    if analyze_button:
         
         # Load demand data
         with st.spinner("Loading demand data from Supabase..."):
