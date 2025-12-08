@@ -22,7 +22,7 @@ from shapely.geometry import Polygon, mapping
 import pydeck as pdk
 import json
 
-from IPython.display import Image
+# from IPython.display import Image
 import matplotlib.pyplot as pyplot
 import folium
 import folium.features
