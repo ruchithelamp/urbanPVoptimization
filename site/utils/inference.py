@@ -65,7 +65,7 @@ def find_roof_shapes(predicted, og_size = (256, 256)):
   return pixels
 
 # roofarea
-def roofarea(img_path, city): 
+def roofarea(img_path, city, supa): 
   '''
   Docstring for roofarea
   
@@ -78,7 +78,7 @@ def roofarea(img_path, city):
 
   # YOLO predict (roof shapes), get Results object
   from app import supabase 
-  model = load_model(supabase)
+  model = load_model(supa)
   predicted = model.predict(img_path, save=False)[0]
 
   # Inference: Get all the roof pixels
