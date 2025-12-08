@@ -7,10 +7,11 @@ Pillow
 PyPDF2
 PyYAML
 requests
-opencv-python
 tqdm
 detectron2
 streamlit
 psycopg2-binary
 supabase
 sqlalchemy
+opencv-python-headless
+ultralytics
