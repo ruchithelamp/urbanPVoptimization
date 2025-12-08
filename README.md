@@ -20,9 +20,12 @@ Using high-resolution satellite imagery, this code will:
 The repository contains all of the code that was used to train the models, generate the figures in the report, and produce an interactive tool for exploring rooftop PV potential.
 
 
-If you have any issues running this code, or have questions for the creators of this project, please contact the following:
+If you have any issues running this code, or have questions for the creators of this project, please contact the following people:
+
 Erin Mettler: `<Emettler97>` `<emettler@umich.edu>`,
+
 Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
+
 Stephanie Maciejewski: `<PteroisRadiata>`, `<smacieje@umich.edu>`
 
 # DATA ACCESS STATEMENT - UPDATE THIS!
