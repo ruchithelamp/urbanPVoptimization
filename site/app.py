@@ -496,7 +496,6 @@ with tab1:
             #st.write("First year savings: " + "25 year savings: ")
             #st.write("Annual CO2 redux: " + "25 year CO2 redux")
         
-        st.success("Analysis complete")
 
 with tab2:
     st.header("Roof Area Estimator")
