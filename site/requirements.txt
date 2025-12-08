@@ -1,17 +1,28 @@
-torch
-torchvision
-matplotlib
+# requirements.txt
+
+# ML
+torch==2.5.1
+torchvision==0.20.1
+ultralytics==8.3.13
+opencv-python-headless
+
+# data reqs
 pandas
 numpy
+matplotlib
+geopandas
+shapely
+osmnx
+rasterio
+
+
+# regular reqs
+streamlit
+supabase
+sqlalchemy
+psycopg2-binary
 Pillow
 PyPDF2
 PyYAML
 requests
 tqdm
-detectron2
-streamlit
-psycopg2-binary
-supabase
-sqlalchemy
-opencv-python-headless
-ultralytics
