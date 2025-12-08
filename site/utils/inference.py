@@ -13,9 +13,9 @@ import streamlit as st
 MODEL_PATH = "/tmp/best.pt"
 
 @st.cache_resource
-def load_model(sup):
+def load_model(_sup):
     # download pt from supabase
-    path = download_model_from_supabase(sup)
+    path = download_model_from_supabase(_sup)
     # load YOLO model from that path
     return YOLO(path)
 
@@ -78,7 +78,7 @@ def roofarea(img_path, city, supa):
 
   # YOLO predict (roof shapes), get Results object
 #   from app import supabase 
-  model = load_model(sup=supa)
+  model = load_model(_sup=supa)
   predicted = model.predict(img_path, save=False)[0]
 
   # Inference: Get all the roof pixels
