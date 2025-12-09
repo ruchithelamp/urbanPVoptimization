@@ -76,13 +76,8 @@ def fetch_buildings_osm(place_name: str):
     )
 
     # Calculate the area (meters)
-    # gdf_proj = ox.projection.project_gdf(gdf)
-    # ok so get the roof area from session, making sure it exists
-    if "roof_area_m" in st.session_state:
-        gdf["area_m2"] = st.session_state["roof_area_m"]
-    else: 
-        st.error("There is no roof area estimate found. Try again.")
-        st.stop()
+    gdf_proj = ox.projection.project_gdf(gdf)
+    gdf['area_m2'] = gdf_proj.area
 
     return gdf   
     
@@ -322,43 +317,7 @@ city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"])
 solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
 commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
-<<<<<<< HEAD
                                               value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
-=======
-                                            value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
-analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
-estimator_button = st.sidebar.button("Estimate Roof Area", key="estimator_roof_area")
-with tab1: 
-    st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
-    st.header("Roof Area Estimator")
-
-    # ---- Roof Area Estimator --------
-    st.write("Upload a 256x256 satellite tile, and choose the respective city. ")
-
-    # ------ image upload
-    tile = st.file_uploader(
-        "Upload satellite tile image (PNG)", type=["png", "jpg", "jpeg"], key="roof_tile"
-    )
-    # if a tile image has been upload, present estimate results
-    if estimator_button:
-        if tile: # GIVEN a sat IMG, get area
-            with st.spinner("Predicting..."):
-                try:
-                    city_choose = city # matching up our city codes with the city button in sidebar
-                    area, mask = roofarea(tile, city_choose, supabase)
-
-                    # Ok so we are going to pass this to GSF object
-                    #  SAVE area to SESSION
-                    st.session_state["roof_area_m"] = float(area)
-                    st.success(f"Roof Area Estimation: {area:.2f} sq m")
-
-                    st.sidebar.subheader("Roofs found: ")
-                    st.sidebar.image(mask, caption="roof overlay", width="300")
-                except Exception as e: 
-                    st.sidebar.error(f"Error: {e}")
-        elif not tile:
-            st.warning("Satellite tile needed to estimate roof area. (in sidebar)")
->>>>>>> 9cc6af7 (roof est to sidebar and to session)
 
 
 if st.sidebar.button("Analyze"):
@@ -524,7 +483,6 @@ if st.sidebar.button("Analyze"):
 
         if fig is not None:
             st.pyplot(fig)
-<<<<<<< HEAD
 
     st.header("City Specifications")
     specs_container = st.container(border=True)
@@ -533,39 +491,6 @@ if st.sidebar.button("Analyze"):
         total_usable_area = buildings['usable_area_m2'].sum()
         total_selected_area = selected_gdf['area_m2'].sum()
         total_selected_usable_area = selected_gdf['usable_area_m2'].sum()
-=======
-            
-        # City specs container
-        st.write("City Specs")
-        with st.container(height=300):
-            st.write("Number of residential buildings:" + '' * 25 + "Available m2:")
-            st.write("Number of commercial buildings:" + '' * 25 + "Available m2:")
-            st.metric("City annual energy (kWh)", f"{annual_kwh:,.0f}")
-            st.write("Projected power demand: " + '' * 25 + "Growth rate: ")
-            st.write("Current cost:")
-        
-
-        # Results container
-        st.write("Results")
-        with st.container(height=300):
-            st.write(f"Actual commercial %: {actual_comm_pct:.1f}%")
-            st.write("Number of residential buildings used:")
-            st.write("Estimated number of panels required: " + '' * 25 + "Estimated total panel cost: ")
-            st.write("Payback period:")
-            st.write(f"✓ Total potential all buildings: {buildings['annual_potential_kwh'].sum():,.0f} kWh")
-            st.write(f"✓ Residential buildings: {buildings['is_residential'].sum()}")
-            st.write(f"✓ Commercial buildings: {(~buildings['is_residential']).sum()}")
-            #st.write("First year savings: " + "25 year savings: ")
-            #st.write("Annual CO2 redux: " + "25 year CO2 redux")
-        
-        st.success("Analysis complete")
-
-with tab2:
-    st.header("Estimates for Roof Area")
-
-    
-    # thing
->>>>>>> 9cc6af7 (roof est to sidebar and to session)
 
         st.write(f"Residential buildings: {buildings['is_residential'].sum()}")
         st.write(f"Commercial buildings: {(~buildings['is_residential']).sum()}")
