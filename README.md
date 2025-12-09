@@ -53,7 +53,7 @@ This repository uses Landsat imagery courtesy of the U.S. Geological Survey. Dat
 
 <https://earthexplorer.usgs.gov/>
 
-### Data Attribution
+### Permit Data
 
 This project includes public-record permit data from municipal websites:
 
@@ -64,4 +64,4 @@ This project includes public-record permit data from municipal websites:
 
 All materials are public records.
 
-"how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected."
+"Licenses for data use and redistribution are respected."
