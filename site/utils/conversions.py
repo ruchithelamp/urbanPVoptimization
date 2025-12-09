@@ -4,11 +4,11 @@
 # business logic: Concersion rules
 # AZ: 0.5 meters per pixel, MI: 1 foot per pixels
 # using feet
-onefootinmeters = 3.28084
-
+METERinFOOT = 0.3048
+ 
 CITY_RULES = {
-    "AZ": 0.5 * onefootinmeters
-    , "MI": 1.0
+     "Tucson" : 0.5
+    ,"Ann Arbor" : 1.0 * METERinFOOT
 }
 
 

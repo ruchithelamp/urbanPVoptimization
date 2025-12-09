@@ -76,9 +76,9 @@ def roofarea(img_path, city, supa):
   
   :param img_path: image file to inference
   :param city: city code for conversion rules
-  out: float area in square feet
+  out: float area in square meters
   '''
-  # Get city conversion (float)
+  # Get city conversion (float) - METERS
   conversion = get_city_conversion(city)
 
   # streamlit is messing with image type by the time it gets to the model 
@@ -98,11 +98,11 @@ def roofarea(img_path, city, supa):
 
   # Find real life Area of all detected roof shapes
   # conversion ft squared times all pixels
-  a_sqft = px * (conversion ** 2)
+  AREA_m = px * (conversion ** 2)
 
   mask = roof_vis(predicted)
 
-  return a_sqft, mask
+  return AREA_m, mask
 
 
 # inferencing mask overlay
