@@ -1,3 +1,4 @@
+# app.py
 import streamlit as st
 from supabase import create_client, Client
 import pandas as pd
@@ -8,6 +9,10 @@ import shapely
 from shapely.geometry import Polygon, mapping
 import rasterio
 from rasterio.mask import mask
+
+from utils.inference import roofarea
+from utils.conversions import CITY_RULES
+
 
 # Load secrets
 url = st.secrets["SUPABASE_URL"]
@@ -75,9 +80,7 @@ def fetch_buildings_osm(place_name: str):
         ), axis=1
     )
 
-    # Calculate the area (meters)
-    gdf_proj = ox.projection.project_gdf(gdf)
-    gdf['area_m2'] = gdf_proj.area
+
 
     return gdf   
     
@@ -310,6 +313,7 @@ def compute_suitability_scores(gdf: gpd.GeoDataFrame, irradiance_factor: float, 
 # Streamlit UI and main flow
 # -----------------------
 st.title("Urban Solar Suitability Planner")
+
 st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
 
 # Sidebar controls
@@ -319,8 +323,18 @@ commercial_pct = st.sidebar.slider("Percent of selected buildings to be commerci
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
                                               value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
 
+# ---------------------------------------------- ROOF AREA STUFF LOUISE ---------------------------
+tile = st.file_uploader("Upload satellite tile image (PNG)", type=["png", "jpg", "jpeg"])
+ESTIMATOR = st.sidebar.button("Estimate Roof Area", key="estimation_butt")
+
+
+
+
+
 
 if st.sidebar.button("Analyze"):
+
+
     
     # STEP 1: Load demand data
     with st.spinner("Loading demand data from Supabase..."):
@@ -367,6 +381,24 @@ if st.sidebar.button("Analyze"):
     if len(buildings) == 0:
         st.error("No buildings found")
         st.stop()
+    
+    # ----  ROOF ESTIMATION ----
+    tile = st.file_uploader("Upload 256x256 satellite tile (PNG)", type=["png","jpg","jpeg"])
+
+    if tile is None:
+        st.error("PLEASE upload sat image")
+        st.stop()
+
+    with st.spinner("Estimating roof area..."):
+        try:
+            roof_area_m2, mask = roofarea(tile, city, supabase)
+            buildings["area_m2"] = roof_area_m2
+        except Exception as e:
+            st.error(f"Roof area estimation failed: {e}")
+            st.stop()
+
+    st.success(f"Roof Area: {roof_area_m2:.2f} m²")
+    st.image(mask, use_column_width=True)
 
     # STEP 5: Compute features
     with st.spinner("Estimating roof geometry (orientation, tilt, area)..."):
