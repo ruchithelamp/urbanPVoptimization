@@ -322,9 +322,6 @@ city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"])
 solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
 commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
-<<<<<<< HEAD
-                                              value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
-=======
                                             value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
 analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
 estimator_button = st.sidebar.button("Estimate Roof Area", key="estimator_roof_area")
@@ -358,7 +355,6 @@ with tab1:
                     st.sidebar.error(f"Error: {e}")
         elif not tile:
             st.warning("Satellite tile needed to estimate roof area. (in sidebar)")
->>>>>>> 9cc6af7 (roof est to sidebar and to session)
 
 
 if st.sidebar.button("Analyze"):
@@ -524,16 +520,6 @@ if st.sidebar.button("Analyze"):
 
         if fig is not None:
             st.pyplot(fig)
-<<<<<<< HEAD
-
-    st.header("City Specifications")
-    specs_container = st.container(border=True)
-    with specs_container:
-        total_rooftop_area = buildings['area_m2'].sum()
-        total_usable_area = buildings['usable_area_m2'].sum()
-        total_selected_area = selected_gdf['area_m2'].sum()
-        total_selected_usable_area = selected_gdf['usable_area_m2'].sum()
-=======
             
         # City specs container
         st.write("City Specs")
@@ -565,19 +551,3 @@ with tab2:
 
     
     # thing
->>>>>>> 9cc6af7 (roof est to sidebar and to session)
-
-        st.write(f"Residential buildings: {buildings['is_residential'].sum()}")
-        st.write(f"Commercial buildings: {(~buildings['is_residential']).sum()}")
-        st.write(f"Total rooftop area (all buildings): {total_rooftop_area:,.0f} m²")
-        st.write(f"Total usable area (all buildings): {total_usable_area:,.0f} m²")
-        st.write("City annual energy (kWh)", f"{annual_kwh:,.0f}")
-
-    st.header("Results")
-    specs_container = st.container(border=True)
-    with specs_container:
-
-        st.write(f"Selected {n_selected} buildings")
-        st.write(f"Total kWh selected: {tot_kwh_sel:,.0f}")
-        st.write(f"Actual commercial %: {actual_comm_pct:.1f}%")
-        st.write("Selected potential (kWh/year)", f"{tot_kwh_sel:,.0f}")      
