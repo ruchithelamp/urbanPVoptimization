@@ -4,7 +4,7 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 import osmnx as ox
-from supabase import create_client
+from supabase import create_client, Client
 import rasterio
 from rasterio.mask import mask
 from shapely.geometry import Polygon
