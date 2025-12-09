@@ -30,7 +30,7 @@ Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
 
 
 
-# DATA ACCESS STATEMENT - UPDATE THIS!
+# DATA ACCESS STATEMENT
 ### Demand Data 
 
 Hourly demand data is collected from electric balancing authorities by the U.S. Energy Information Administration (EIA) via Form-930. Raw data is made available to the public through the EIA Open Data portal.
