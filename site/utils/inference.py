@@ -1,4 +1,6 @@
 # utils/inference.py
+print("Inference module loaded")
+
 import os
 os.environ["OPENCV_VIDEOIO_DISABLE"] = "1"
 os.environ["OPENCV_OPENGL_SUPPORT"] = "0"
