@@ -1,9 +1,12 @@
+# A script for converting downloaded PDF Tucson permits 
+# into dataframes for EDA
+
 from PyPDF2 import PdfReader
 import pandas as pd
 import re
 import os
 
-filepath = "C:/Users/Owner/Documents/MADS/Capstone/Data/Tucson_permits/Residential"
+filepath = "./Tucson_permits/Residential"
 
 dataframes = []
 
@@ -44,7 +47,7 @@ for file in os.listdir(filepath):
 
 if dataframes:
     clean_permits = pd.concat(dataframes, ignore_index=True)
-    clean_permits.to_csv("C:/Users/Owner/Documents/MADS/Capstone/Data/Tucson_solar_permits.csv", index=False)
+    clean_permits.to_csv("./Data/Tucson_solar_permits.csv", index=False)
     print(f"Saved {len(clean_permits)} solar permits.")
 else:
     print("No solar permits found.")      
