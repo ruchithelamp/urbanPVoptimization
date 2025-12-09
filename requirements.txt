@@ -32,4 +32,4 @@ streamlit-folium
 rtree
 pyproj
 fiona
-
+detectron2
