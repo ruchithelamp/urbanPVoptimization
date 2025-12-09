@@ -28,114 +28,73 @@ insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — opti
 
 
 
-# Sq ft TAB
+# MAIN
 analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
 with tab1: 
     st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
 
     # Button
     if analyze_button:
-        
-        # Load demand data
+      
+        planner = SolarSuitability(
+        city=city,
+        supabase_url=supabase_url,
+        supabase_key=supabase_key,
+        solar_pct=solar_pct,
+        commercial_pct=commercial_pct,
+        insolation_override=insolation_override
+        )
+
+        # Demand
         with st.spinner("Loading demand data from Supabase..."):
-            df_demand = load_demand_table(city)
-        
+            demand_df = planner.load_demand_table()
+    
         if df_demand.empty:
             st.error("Loaded demand table is empty. Check Supabase table names and permissions.")
             st.stop()
+    
+        annual_kwh = planner.compute_city_annual_kwh(demand_df)
+        target_kwh = annual_kwh * (solar_pct / 100.0)
 
-        # Compute annual energy
-        with st.spinner("Computing annual energy need..."):
-            annual_kwh = compute_city_annual_kwh(df_demand)
-        
-        st.write(f"Annual kWh result: {annual_kwh}")
-        
         if pd.isna(annual_kwh) or annual_kwh == 0:
             st.error(f"Annual kWh is {annual_kwh}. Cannot proceed.")
             st.stop()
 
         required_kwh = annual_kwh * (solar_pct / 100.0)
+      
+        # Load building footprints
+        with st.spinner("Loading OSM buildings…"):
+           gdf = planner.fetch_buildings_osm()
 
-        # Rasters
-        tif_name = "ann_arbor.tif" if city == "Ann Arbor" else "tucson.tif"
-        raster = None
-        try:
-            with st.spinner("Downloading GeoTIFF from Supabase..."):
-                # Check if download_geotiff_from_supabase function works
-                if 'download_geotiff_from_supabase' in globals():
-                    raster = download_geotiff_from_supabase("satellite", tif_name)
-                    st.write("GeoTIFF loaded")
-                else:
-                    st.warning("Download_geotiff_from_supabase function not found. Skipping raster.")
-        except Exception as e:
-            st.warning(f"Could not download GeoTIFF: {e}. Continuing without shade (shade=0).")
-
-        # Get buildings
-        with st.spinner("Fetching building footprints from OSM (this may take a minute)..."):
-            place_name = f"{city}, USA"
-            try:
-                buildings = fetch_buildings_osm(place_name)
-                st.write(f"✓ Fetched {len(buildings)} buildings")
-                st.write(f"Columns: {buildings.columns.tolist()}")
-            except Exception as e:
-                st.error(f"OSMnx fetch failed: {e}")
-                st.stop()
-
-        if len(buildings) == 0:
-            st.error("No buildings found")
+        if gdf.empty:
+            st.error("Loaded demand table is empty. Check Supabase table names and permissions.")
             st.stop()
 
-        # Compute geometry features
-        with st.spinner("Estimating roof geometry (orientation, tilt, area)..."):
-            buildings["orientation_deg"] = buildings.geometry.apply(lambda g: polygon_orientation(g))
-            buildings = estimate_tilt_from_height_and_span(buildings)
+        # Estimate roof geometry / tilt
+        gdf = planner.estimate_tilt_from_height_and_span(gdf)
 
-        # Compute shade
-        if raster is not None:
-            st.info("Computing shade from GeoTIFF...")
-            # Check if shade_from_geotiff function exists
-            if 'shade_from_geotiff' in globals():
-                progress = st.progress(0)
-                total = len(buildings)
-                shades = []
-                for i, (idx, row) in enumerate(buildings.iterrows()):
-                    try:
-                        s = shade_from_geotiff(raster, row.geometry)
-                    except Exception:
-                        s = 0.0
-                    shades.append(s)
-                    if i % 100 == 0 and total > 0:
-                        progress.progress(int((i+1)/total * 100))
-                buildings["shade"] = shades
-                progress.empty()
-                st.write(f"Shade range: {buildings['shade'].min():.2f} to {buildings['shade'].max():.2f}")
-            else:
-                st.warning("Shade from geotiff not found. Setting shade=0")
-                buildings["shade"] = 0.0
-        else:
-            buildings["shade"] = 0.0
-            st.write("Shade set to 0.0 (no raster)")
+        # Shade estimation (if you have GeoTIFF, else assume zero)
+        if "shade" not in gdf.columns:
+            gdf["shade"] = 0  # default — override later if needed
 
-        # Irradiance and azimuth
-        irr_factor = np.clip(insolation_override / 7.0, 0.0, 1.0)
+        # Suitability Scoring
+        ideal_azimuth = demand_df["azimuth_sunrise"].iloc[-1] if "azimuth_sunrise" in demand_df else 150
+
+        gdf = planner.compute_suitability_scores(
+            gdf,
+            irr_factor=1.0,
+            ideal_azimuth=ideal_azimuth
+        )
+
+        # Annual Solar Potential
+        gdf = planner.estimate_building_annual_potential(gdf)
         
-        if {"azimuth_sunrise","azimuth_sunset"}.issubset(df_demand.columns):
-            try:
-                mean_azimuth_range = ((df_demand["azimuth_sunset"] + df_demand["azimuth_sunrise"]) / 2.0).mean()
-                ideal_azimuth = float(mean_azimuth_range)
-                st.write(f"✓ Ideal azimuth: {ideal_azimuth:.1f}° (from data)")
-            except Exception:
-                ideal_azimuth = 180.0
-        else:
-            ideal_azimuth = 180.0
-
-        # Compute suitability scores
-        with st.spinner("Computing solar suitability scores and annual potential..."):
-            buildings = compute_suitability_scores(buildings, irr_factor, ideal_azimuth)
-            buildings = estimate_building_annual_potential_kwh(buildings, insolation_override)
-        
-        with st.spinner("Selecting buildings to meet target while respecting commercial mix..."):
-            selected_gdf, tot_kwh_sel, n_selected, actual_comm_pct = select_buildings_to_meet_target(buildings, required_kwh, commercial_pct)
+        # Select buildings to meet target
+        selected_gdf, total_kwh, count, actual_commercial_pct = planner.select_buildings(
+            gdf,
+            required_kwh=target_kwh,
+            commercial_pct=commercial_pct
+        )
 
         # Split into residential and commercial
         gdf_residential = selected_gdf[selected_gdf['is_residential']].copy()
@@ -148,6 +107,7 @@ with tab1:
             gdf_commercial = gpd.GeoDataFrame(gdf_commercial, geometry='geometry', crs=selected_gdf.crs)
 
         # Plot results
+        st.header("Map of Suitable Locations")
         map_container = st.container(border=True)
         with map_container:
             if not gdf_residential.empty and not gdf_commercial.empty:
@@ -194,24 +154,32 @@ with tab1:
             st.pyplot(fig)
             
         # City specs container
-        st.write("City Specs")
-        with st.container(height=300):
-            st.write("Number of residential buildings:" + '' * 25 + "Available m2:")
-            st.write("Number of commercial buildings:" + '' * 25 + "Available m2:")
-            st.metric("City annual energy (kWh)", f"{annual_kwh:,.0f}")
-            st.write("Projected power demand: " + '' * 25 + "Growth rate: ")
-            st.write("Current cost:")
+        st.header("City Specifications")
+        specs_container = st.container(border=True)
+        with specs_container:
+            total_rooftop_area = gdf['area_m2'].sum()
+            total_usable_area = gdf['usable_area_m2'].sum()
+            total_selected_area = selected_gdf['area_m2'].sum()
+            total_selected_usable_area = selected_gdf['usable_area_m2'].sum()
+
+            st.write(f"Residential buildings: {gdf['is_residential'].sum()}")
+            st.write(f"Commercial buildings: {(~gdf['is_residential']).sum()}")
+            st.write(f"Total rooftop area (all buildings): {total_rooftop_area:,.0f} m²")
+            st.write(f"Total usable area (all buildings): {total_usable_area:,.0f} m²")
+            st.write("City annual energy (kWh)", f"{annual_kwh:,.0f}")
+            #st.write("Current cost:")
 
         # Results container
-        st.write("Results")
-        with st.container(height=300):
-            st.write(f"Actual commercial %: {actual_comm_pct:.1f}%")
-            st.write("Number of residential buildings used:")
-            st.write("Estimated number of panels required: " + '' * 25 + "Estimated total panel cost: ")
-            st.write("Payback period:")
-            st.write(f"✓ Total potential all buildings: {buildings['annual_potential_kwh'].sum():,.0f} kWh")
-            st.write(f"✓ Residential buildings: {buildings['is_residential'].sum()}")
-            st.write(f"✓ Commercial buildings: {(~buildings['is_residential']).sum()}")
+        st.header("Results")
+        specs_container = st.container(border=True)
+        with specs_container:
+            st.write(f"Selected {count} buildings")
+            st.write(f"Total kWh selected: {tot_kwh:,.0f}")
+            st.write(f"Actual commercial %: {actual_commercial_pct:.1f}%")
+            st.write(f"Total potential all buildings: {gdf['annual_potential_kwh'].sum():,.0f} kWh")
+            #st.write("Number of residential buildings used:")
+            #st.write("Estimated number of panels required: " + '' * 25 + "Estimated total panel cost: ")
+            #st.write("Payback period:")
             #st.write("First year savings: " + "25 year savings: ")
             #st.write("Annual CO2 redux: " + "25 year CO2 redux")
         
