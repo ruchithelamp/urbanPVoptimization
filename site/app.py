@@ -2,7 +2,7 @@
 import streamlit as st
 import geopandas as gpd
 from shapely.geometry import mapping
-import solar_suitability
+from solar_suitability import SolarSuitability
 
 from utils.inference import roofarea
 from utils.conversions import CITY_RULES
