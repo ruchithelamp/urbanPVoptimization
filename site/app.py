@@ -28,7 +28,11 @@ commercial_pct = st.sidebar.slider("Percent of selected buildings to be commerci
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",
                                               value=float(SolarSuitability.DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
 
-
+@st.cache_data(show_spinner=False)
+def get_buildings(city, supabase_url, supabase_key):
+    planner = SolarSuitability(city, supabase_url, supabase_key)
+    gdf = planner.fetch_buildings_osm()
+    return gdf
 
 # MAIN
 analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
@@ -64,9 +68,9 @@ with tab1:
         required_kwh = annual_kwh * (solar_pct / 100.0)
       
         # Load building footprints
-        @st.cache_data(show_spinner=False)
-        with st.spinner("Loading OSM buildings…"):
-           gdf = planner.fetch_buildings_osm()
+        #with st.spinner("Loading OSM buildings…"):
+           #gdf = planner.fetch_buildings_osm()
+            gdf = get_buildings(city, supabase_url, supabase_key)
 
         if gdf.empty:
             st.error("Loaded demand table is empty. Check Supabase table names and permissions.")
