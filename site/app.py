@@ -33,8 +33,6 @@ insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — opti
 analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
 tab1, tab2 = st.tabs(["Planner", "Roof Estimator"])
 with tab1: 
-    st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
-
     # Button
     if analyze_button:
       
