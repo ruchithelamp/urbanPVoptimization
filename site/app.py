@@ -324,9 +324,11 @@ insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — opti
                                               value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
 
 # ---------------------------------------------- ROOF AREA STUFF LOUISE ---------------------------
-tile = st.file_uploader("Upload satellite tile image (PNG)", type=["png", "jpg", "jpeg"])
-ESTIMATOR = st.sidebar.button("Estimate Roof Area", key="estimation_butt")
+tile = st.file_uploader("Upload 256x256 satellite tile (PNG)", type=["png","jpg","jpeg"])
 
+if tile is None:
+    st.error("PLEASE upload sat image")
+    st.stop()
 
 
 
@@ -383,10 +385,9 @@ if st.sidebar.button("Analyze"):
         st.stop()
     
     # ----  ROOF ESTIMATION ----
-    tile = st.file_uploader("Upload 256x256 satellite tile (PNG)", type=["png","jpg","jpeg"])
-
+    tile = st.session_state.get("tile")
     if tile is None:
-        st.error("PLEASE upload sat image")
+        st.error("Please upload sat image first.")
         st.stop()
 
     with st.spinner("Estimating roof area..."):
