@@ -1,6 +1,7 @@
 # app.py
 import streamlit as st
 import geopandas as gpd
+import pandas as pd
 from shapely.geometry import mapping
 from supabase import create_client, Client
 from solar_suitability import SolarSuitability
