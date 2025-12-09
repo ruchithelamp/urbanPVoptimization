@@ -2,6 +2,7 @@
 import streamlit as st
 import geopandas as gpd
 from shapely.geometry import mapping
+from supabase import create_client, Client
 from solar_suitability import SolarSuitability
 
 from utils.inference import roofarea
