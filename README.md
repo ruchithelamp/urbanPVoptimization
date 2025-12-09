@@ -31,4 +31,36 @@ Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
 
 
 # DATA ACCESS STATEMENT - UPDATE THIS!
+### Demand Data 
+
+Hourly demand data is collected from electric balancing authorities by the U.S. Energy Information Administration (EIA) via Form-930. Raw data is made available to the public through the EIA Open Data portal documented here:
+
+https://www.eia.gov/opendata/
+
+The specific hourly demand data used is originally located here:
+
+https://www.eia.gov/opendata/qb.php?category=2122628
+
+The EIA began collecting hourly demand data in July of 2015 and continuously publishes new values each day.
+
+The reported demand value for each hour corresponds to the integrated mean value in megawatts over the previous hour.
+
+Cleaned and archived EIA data publicly available for download from:
+
+Ruggles, T.H., Farnham, D.J., Tong, D. et al. Developing reliable hourly electricity demand data through screening and imputation. Sci Data 7, 155 (2020). https://doi.org/10.1038/s41597-020-0483-x
+
+and the data archive:
+
+Ruggles, Tyler H., Farnham, David J. & Wongel, Alicia (2025). EIA Cleaned Hourly Electricity Demand Data (Version v1.4) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3517196
+
+<https://github.com/truggles/EIA_Cleaned_Hourly_Electricity_Demand_Data>
+
+### Satellite Imagery
+
+This repository uses Landsat imagery courtesy of the U.S. Geological Survey.
+
+Data is public domain (USGS).
+
+<https://earthexplorer.usgs.gov/>
+
 "how to access the data or explaining who owns the data. Licenses for data use and redistribution are respected."
