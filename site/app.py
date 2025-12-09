@@ -64,6 +64,7 @@ with tab1:
         required_kwh = annual_kwh * (solar_pct / 100.0)
       
         # Load building footprints
+        @st.cache_data(show_spinner=False)
         with st.spinner("Loading OSM buildings…"):
            gdf = planner.fetch_buildings_osm()
 
