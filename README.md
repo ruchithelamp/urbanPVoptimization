@@ -58,7 +58,9 @@ This repository uses Landsat imagery courtesy of the U.S. Geological Survey. Dat
 This project includes public-record permit data from municipal websites:
 
 - City of Ann Arbor — permit documents obtained from the Ann Arbor online permitting portal.
+  https://stream.a2gov.org/energov_prod/selfservice/#/search
 - City of Tucson — permit documents obtained from the Tucson Planning & Development Services website.
+  https://www.tucsonaz.gov/Departments/Planning-Development-Services/Development-Tools-Resources/Development-Activity-Reports/Permit-Activity
 
 All materials are public records.
 
