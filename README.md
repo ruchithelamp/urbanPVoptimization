@@ -19,6 +19,7 @@ Using high-resolution satellite imagery, this code will:
 
 The repository contains all of the code that was used to train the models, generate the figures in the report, and produce an interactive tool for exploring rooftop PV potential.
 
+You can view all dependencies in the [requirements.txt](site/requirements.txt) file.
 
 If you have any issues running this code, or have questions for the creators of this project, please contact the following people:
 
