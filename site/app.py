@@ -25,12 +25,13 @@ city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"])
 solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
 commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",
-                                              value=float(DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
+                                              value=float(SolarSuitability.DEFAULT_INSOLATION[city]), min_value=0.0, step=0.1)
 
 
 
 # MAIN
 analyze_button = st.sidebar.button("Analyze", key="sidebar_analyze")
+tab1, tab2 = st.tabs(["Planner", "Roof Estimator"])
 with tab1: 
     st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
 
@@ -39,8 +40,8 @@ with tab1:
       
         planner = SolarSuitability(
         city=city,
-        supabase_url=supabase_url,
-        supabase_key=supabase_key,
+        supabase_url=url,
+        supabase_key=key,
         solar_pct=solar_pct,
         commercial_pct=commercial_pct,
         insolation_override=insolation_override
@@ -50,7 +51,7 @@ with tab1:
         with st.spinner("Loading demand data from Supabase..."):
             demand_df = planner.load_demand_table()
     
-        if df_demand.empty:
+        if demand_df.empty:
             st.error("Loaded demand table is empty. Check Supabase table names and permissions.")
             st.stop()
     
@@ -175,7 +176,7 @@ with tab1:
         specs_container = st.container(border=True)
         with specs_container:
             st.write(f"Selected {count} buildings")
-            st.write(f"Total kWh selected: {tot_kwh:,.0f}")
+            st.write(f"Total kWh selected: {total_kwh:,.0f}")
             st.write(f"Actual commercial %: {actual_commercial_pct:.1f}%")
             st.write(f"Total potential all buildings: {gdf['annual_potential_kwh'].sum():,.0f} kWh")
             #st.write("Number of residential buildings used:")
