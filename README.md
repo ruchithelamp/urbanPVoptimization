@@ -1,4 +1,4 @@
-# Mapping Rooftop Solar Potential with Deep Learning  
+# Optimizing Rooftop Solar Potential for a City with Machine Learning  
 _MADS Fall 2025 Capstone Project_
 
 ## Project Overview
