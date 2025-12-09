@@ -325,10 +325,8 @@ insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — opti
 
 # ---------------------------------------------- ROOF AREA STUFF LOUISE ---------------------------
 tile = st.file_uploader("Upload 256x256 satellite tile (PNG)", type=["png","jpg","jpeg"])
-
-if tile is None:
-    st.error("PLEASE upload sat image")
-    st.stop()
+if tile:
+    st.session_state["tile"] = tile
 
 
 
