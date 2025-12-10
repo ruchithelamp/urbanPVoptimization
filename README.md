@@ -31,7 +31,7 @@ Ruchi Patil: `<Ruchithelamp>` `<ruchipat@umich.edu>`,
 
 
 
-# DATA ACCESS STATEMENT
+## DATA ACCESS STATEMENT
 ### Demand Data 
 
 Hourly demand data is collected from electric balancing authorities by the U.S. Energy Information Administration (EIA) via Form-930. Raw data is made available to the public through the EIA Open Data portal.
@@ -59,10 +59,9 @@ This repository uses Landsat imagery courtesy of the U.S. Geological Survey. Dat
 This project includes public-record permit data from municipal websites:
 
 - City of Ann Arbor — permit documents obtained from the Ann Arbor online permitting portal.
-  https://stream.a2gov.org/energov_prod/selfservice/#/search
-- City of Tucson — permit documents obtained from the Tucson Planning & Development Services website.
-  https://www.tucsonaz.gov/Departments/Planning-Development-Services/Development-Tools-Resources/Development-Activity-Reports/Permit-Activity
 
-All materials are public records.
+## Streamlit Instructions
+The app can be viewed here: <https://urbanpvplanning.streamlit.app/>
+
 
 "Licenses for data use and redistribution are respected."
