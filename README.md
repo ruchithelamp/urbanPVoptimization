@@ -63,5 +63,9 @@ This project includes public-record permit data from municipal websites:
 ## Streamlit Instructions
 The app can be viewed here: <https://urbanpvplanning.streamlit.app/>
 
+## Model Requirements and Installation
+Prior to running the models, please install and set up the project dependencies utilizing the requirements .txt file.
+
+>pip install -r requirements.txt
 
 "Licenses for data use and redistribution are respected."
