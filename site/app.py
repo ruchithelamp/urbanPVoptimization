@@ -33,9 +33,29 @@ def load_yearly_demand(city):
 
 @st.cache_data(ttl=86400)
 def load_buildings(city):
-    gdf = ox.features.features_from_place(f'{city}, USA', tags={'building':True})
-    gdf = gdf[gdf.geometry.type.isin(['Polygon','MultiPolygon'])].copy()
-    gdf['address'] = gdf.get('addr:housenumber','').fillna('').astype(str) + ' ' + gdf.get('addr:street','').fillna('').astype(str)
+
+    res_tags = {"building": [
+        "house","detached","residential",
+        "apartments","semidetached_house"
+    ]}
+
+    com_tags = {"building": [
+        "office","commercial","retail",
+        "warehouse","industrial","hotel"
+    ]}
+
+    r = ox.features_from_place(f"{city}, USA", tags=res_tags)
+    c = ox.features_from_place(f"{city}, USA", tags=com_tags)
+
+    gdf = pd.concat([r, c])
+
+    gdf["is_residential"] = gdf["building"].isin(
+        ["house","detached","residential",
+         "apartments","semidetached_house"]
+    )
+
+    gdf = gdf[gdf.geometry.type.isin(["Polygon","MultiPolygon"])]
+
     return gdf
 
 # ---------------- Analytics ----------------
