@@ -70,7 +70,7 @@ with tab1:
         # Load building footprints
         #with st.spinner("Loading OSM buildings…"):
            #gdf = planner.fetch_buildings_osm()
-        gdf = get_buildings(city, supabase_url, supabase_key)
+            gdf = get_buildings(city, supabase_url, supabase_key)
 
         if gdf.empty:
             st.error("Loaded demand table is empty. Check Supabase table names and permissions.")
