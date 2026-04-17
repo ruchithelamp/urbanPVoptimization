@@ -24,18 +24,14 @@ st.set_page_config(layout="wide")
 
 # Constants / defaults
 # -----------------------
-# Default average daily insolation in kWh/m2/day (tweakable)
-DEFAULT_INSOLATION = {
-    "Ann Arbor": 4.0,   # kWh/m2/day (approx; user may replace with better data)
-    "Homestead": 4.4,
-    "Los Angeles": 4.6,
-    "Portland": 3.0,
-    "Seattle": 2.9,
-    "Tacoma": 3.0,
-    "Tallahassee": 3.96,
-    "Tampa": 4.0,
-    "Tucson": 6.0,
+# Default average daily insolation in kWh/m2/day (user may select other choice)
+CITY_TABLE_MAP = {
+    'Ann Arbor':'Ann_Arbor_demand','Homestead':'Homestead_demand','Los Angeles':'LA_demand',
+    'Portland':'Portland_demand','Seattle':'Seattle_demand','Tacoma':'Tacoma_demand',
+    'Tallahassee':'Tallahassee_demand','Tampa':'Tampa_demand','Tucson':'TEPC_demand'
 }
+DEFAULT_INSOLATION = {'Ann Arbor':4.0,'Homestead':4.4,'Los Angeles':4.6,'Portland':3.0,'Seattle':2.9,'Tacoma':3.0,'Tallahassee':3.96,'Tampa':4.0,'Tucson':6.0}
+
 PANEL_EFFICIENCY = 0.18   # 18%
 PERFORMANCE_RATIO = 0.75  # losses (inverter, soiling, wiring)
 # -----------------------
