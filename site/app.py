@@ -20,7 +20,6 @@ key = st.secrets["SUPABASE_ANON_KEY"]
 
 supabase: Client = create_client(url, key)
 
-st.set_page_config(layout="wide")
 
 # Constants / defaults
 # -----------------------
@@ -317,6 +316,8 @@ def compute_suitability_scores(gdf: gpd.GeoDataFrame, irradiance_factor: float, 
 # -----------------------
 # Streamlit UI and main flow
 # -----------------------
+
+st.set_page_config(layout="wide")
 st.title("Urban Solar Suitability Planner")
 
 st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
