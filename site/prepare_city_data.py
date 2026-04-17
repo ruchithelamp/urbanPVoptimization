@@ -40,4 +40,3 @@ if __name__ == '__main__':
             fetch_city(city)
         except Exception as e:
             print(city, e)
-if __name__ == '__main__':
