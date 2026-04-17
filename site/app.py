@@ -25,7 +25,7 @@ supabase: Client = create_client(url, key)
 # -----------------------
 # Default average daily insolation in kWh/m2/day (user may select other choice)
 CITY_TABLE_MAP = {
-    'Ann Arbor':'Ann_Arbor_demand','Homestead':'Homestead_demand','Los Angeles':'LA_demand',
+    'Ann Arbor':'Ann_Arbor_demand','Homestead':'Homestead_demand',
     'Portland':'Portland_demand','Seattle':'Seattle_demand','Tacoma':'Tacoma_demand',
     'Tallahassee':'Tallahassee_demand','Tampa':'Tampa_demand','Tucson':'TEPC_demand'
 }
@@ -323,7 +323,7 @@ st.title("Urban Solar Suitability Planner")
 st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
 
 # Sidebar controls
-city = st.sidebar.selectbox("City", ["Ann Arbor", "Homestead", "Los Angeles", "Portland", "Seattle", "Tacoma", "Tallahassee", "Tampa", "Tucson"])
+city = st.sidebar.selectbox("City", ["Ann Arbor", "Homestead", "Portland", "Seattle", "Tacoma", "Tallahassee", "Tampa", "Tucson"])
 solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
 commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
