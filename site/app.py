@@ -42,18 +42,6 @@ def load_demand_table(city: str):
     """
     Load city demand table from Supabase.
     """
-    CITY_TABLE_MAP = {
-        "Ann Arbor": "Ann_Arbor_demand",
-        "Homestead": "Homestead_demand",
-        "Los Angeles": "LA_demand",
-        "Portland": "Portland_demand",
-        "Seattle": "Seattle_demand",
-        "Tacoma": "Tacoma_demand",
-        "Tallahassee": "Tallahassee_demand",
-        "Tampa": "Tampa_demand",
-        "Tucson": "TEPC_demand"
-    }
-
     if city not in CITY_TABLE_MAP:
         raise ValueError(f"Unknown city: '{city}'. Valid options: {list(CITY_TABLE_MAP.keys())}")
 
