@@ -27,6 +27,13 @@ st.set_page_config(layout="wide")
 # Default average daily insolation in kWh/m2/day (tweakable)
 DEFAULT_INSOLATION = {
     "Ann Arbor": 4.0,   # kWh/m2/day (approx; user may replace with better data)
+    "Homestead": 4.4,
+    "Los Angeles": 4.6,
+    "Portland": 3.0,
+    "Seattle": 2.9,
+    "Tacoma": 3.0,
+    "Tallahassee": 3.96,
+    "Tampa": 4.0,
     "Tucson": 6.0,
 }
 PANEL_EFFICIENCY = 0.18   # 18%
@@ -39,11 +46,25 @@ def load_demand_table(city: str):
     """
     Load city demand table from Supabase.
     """
-    table_name = "Ann_Arbor_demand" if city == "Ann Arbor" else "TEPC_demand"
+    CITY_TABLE_MAP = {
+        "Ann Arbor": "Ann_Arbor_demand",
+        "Homestead": "Homestead_demand",
+        "Los Angeles": "LA_demand",
+        "Portland": "Portland_demand",
+        "Seattle": "Seattle_demand",
+        "Tacoma": "Tacoma_demand",
+        "Tallahassee": "Tallahassee_demand",
+        "Tampa": "Tampa_demand",
+        "Tucson": "TEPC_demand"
+    }
+
+    if city not in CITY_TABLE_MAP:
+        raise ValueError(f"Unknown city: '{city}'. Valid options: {list(CITY_TABLE_MAP.keys())}")
+
+    table_name = CITY_TABLE_MAP[city]
     res = supabase.table(table_name).select("*").limit(100000).execute()
-    data = res.data     
-    df = pd.DataFrame(data)
-        
+    df = pd.DataFrame(res.data)
+
     return df
 
 def fetch_buildings_osm(place_name: str):
