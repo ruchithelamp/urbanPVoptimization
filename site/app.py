@@ -338,7 +338,7 @@ st.title("Urban Solar Suitability Planner")
 st.markdown(" A tool to reveal ideal rooftop placement of photovoltaic panels to meet predetermined urban energy needs.")  # this is a sub-heading
 
 # Sidebar controls
-city = st.sidebar.selectbox("City", ["Ann Arbor", "Tucson"])
+city = st.sidebar.selectbox("City", ["Ann Arbor", "Homestead", "Los Angeles", "Portland", "Seattle", "Tacoma", "Tallahassee", "Tampa", "Tucson"])
 solar_pct = st.sidebar.slider("Percent of city energy to meet with solar", 1, 100, 30)
 commercial_pct = st.sidebar.slider("Percent of selected buildings to be commercial", 0, 100, 20)
 insolation_override = st.sidebar.number_input("Insolation (kWh/m²/day) — optional override",        # this is a +/- counter
