@@ -18,6 +18,7 @@ geopandas
 shapely
 osmnx
 rasterio
+plotly
 
 # regular reqs
 streamlit
