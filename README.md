@@ -61,7 +61,7 @@ This project includes public-record permit data from municipal websites:
 - City of Ann Arbor — permit documents obtained from the Ann Arbor online permitting portal.
 
 ## Streamlit Instructions
-The app can be viewed here: <https://solarcityplanner.com/> *(old site <https://urbanpvplanning.streamlit.app/>)*
+The app can be viewed here: <https://solarcityplanner.com/> , streamlit hosted:  <https://urbanpvplanning.streamlit.app/>
 
 ## Model Requirements and Installation
 Prior to running the models, please install and set up the project dependencies utilizing the requirements .txt file.
